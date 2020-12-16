@@ -20,8 +20,6 @@ Use Aseprite's **Keyboard Shortcuts** interface (Edit → Keyboard Shortcuts) to
 
 ## Recommended keybindings
 
-![recommended nudge keybindings](https://i.imgur.com/u9t7ssH.png)
-
 <table>
 	<thead>
 		<tr>
@@ -65,3 +63,5 @@ Use Aseprite's **Keyboard Shortcuts** interface (Edit → Keyboard Shortcuts) to
   </tr>
 </tbody>
 </table>
+
+![recommended nudge keybindings](https://i.imgur.com/u9t7ssH.png)
