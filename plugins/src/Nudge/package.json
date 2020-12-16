@@ -1,0 +1,11 @@
+{
+  "name": "Nudge",
+  "displayName": "Nudge",
+  "description": "Nudge Selected Cels and Layers by 1 ad 10 pixel increments.",
+  "version": "1",
+  "author": { "name": "quietly-turning", "email": "quietly.turning@gmail.com", "url": "https://github.com/quietly-turning/" },
+  "contributors": [],
+  "categories": [ "Scripts" ],
+  "license": "GPLv3",
+  "contributes": { "scripts": "Nudge.lua" }
+}
