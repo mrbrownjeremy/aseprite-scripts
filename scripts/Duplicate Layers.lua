@@ -1,5 +1,8 @@
 ---------------------------------------------------------------
 -- Duplicate Layers (without appending "Copy" to new layer)
+--
+-- author: quietly-turning
+-- github: https://github.com/quietly-turning/
 ---------------------------------------------------------------
 
 if not (app and app.range) then return end

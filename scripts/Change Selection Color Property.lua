@@ -7,6 +7,9 @@
 -- This has buttons for six predefined colors.  Use the "xx"
 -- button to reset the selected range to the default color
 -- for the current Aseprite theme.
+--
+-- author: quietly-turning
+-- github: https://github.com/quietly-turning/
 ---------------------------------------------------------------
 
 if not (app and app.isUIAvailable) then return end

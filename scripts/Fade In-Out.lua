@@ -5,6 +5,9 @@
 -- prompted for:
 --  • a quantity of frames (number input)
 --  • whether you want to fadeIn or fadeOut (button press)
+--
+-- author: quietly-turning
+-- github: https://github.com/quietly-turning/
 ---------------------------------------------------------------
 
 if not app then return end
