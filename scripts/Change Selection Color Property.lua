@@ -17,13 +17,13 @@ if not (app and app.isUIAvailable) then return end
 ---------------------------------------------------------------
 
 local choices = {
-	{ text="Re", color=Color({ r=254, g=91,  b=89,  a=255 }) },
-	{ text="Or", color=Color({ r=247, g=165, b=69,  a=255 }) },
-	{ text="Ye", color=Color({ r=243, g=206, b=82,  a=255 }) },
-	{ text="Gr", color=Color({ r=106, g=205, b=91,  a=255 }) },
-	{ text="Bl", color=Color({ r=87,  g=185, b=242, a=255 }) },
-	{ text="Pu", color=Color({ r=209, g=134, b=223, a=255 }) },
-	{ text="xx", color=Color({ r=0,   g=0,   b=0,   a=0   }) },
+	{ text="R", color=Color({ r=254, g=91,  b=89,  a=255 }) },
+	{ text="O", color=Color({ r=247, g=165, b=69,  a=255 }) },
+	{ text="Y", color=Color({ r=243, g=206, b=82,  a=255 }) },
+	{ text="G", color=Color({ r=106, g=205, b=91,  a=255 }) },
+	{ text="B", color=Color({ r=87,  g=185, b=242, a=255 }) },
+	{ text="V", color=Color({ r=209, g=134, b=223, a=255 }) },
+	{ text="-", color=Color({ r=0,   g=0,   b=0,   a=0   }) },
 }
 
 local dlg = Dialog("Change Color")
