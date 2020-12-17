@@ -1,5 +1,8 @@
 ---------------------------------------------------------------
 -- Nudge
+--
+-- author: quietly-turning
+-- github: https://github.com/quietly-turning/
 ---------------------------------------------------------------
 
 init = function(plugin)
