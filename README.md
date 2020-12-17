@@ -7,13 +7,13 @@ Lua scripts for the pixel art and animation program [Aseprite](https://www.asepr
 
 You can download all the files in this repository as a zip here: <https://github.com/mrbrownjeremy/aseprite-scripts/archive/master.zip>
 
-### Scripts
+### Install Scripts
 
 After you unzip the download, move the Lua files in the *Scripts* folder to your [Aseprite user scripts folder](https://community.aseprite.org/t/locate-user-scripts-folder/2170).
 
 The next time you use Aseprite, those scripts will be available from **File → Scripts**.
 
-### Plugins
+### Install Plugins
 
 After you unzip the download, double click each .aseprite-extension file to install it.
 
