@@ -1,10 +1,12 @@
 ---------------------------------------------------------------
 -- Fade In/Out
 --
--- Call this script when a single Cel is selected and you'll be
+-- Call this script when a single Layer or Cel is selected and you'll be
 -- prompted for:
 --  • a quantity of frames (number input)
 --  • whether you want to fadeIn or fadeOut (button press)
+--
+-- Note that this only operates on a single Layer at a time.
 --
 -- author: quietly-turning
 -- github: https://github.com/quietly-turning/
@@ -30,20 +32,26 @@ local end_opacity   = nil
 ---------------------------------------------------------------
 
 local Check = function(frame_count)
-	local msg
+	local errors = {}
 
-	if not app.activeLayer then msg = "You need to have an activeLayer." end
-	if not app.activeCel   then msg = "You need to have an activeCel." end
-	if not type(start_frame)=="number" then msg = "Please provide a value for Frames." end
+	if not app.activeLayer then errors[#errors+1] = "You need to have an activeLayer." end
+	if not app.activeCel   then errors[#errors+1] = "You need to have an activeCel." end
 
-	return msg
+	return errors
 end
 
 local ApplyFade = function()
 	local frame_count = dlg.data.frame_count
 
-	local error = Check(frame_count)
-	if error then print(error); return end
+	local errors = Check(frame_count)
+	-- if there were errors
+	if #errors > 0 then
+		-- print them
+		for _,msg in ipairs(errors) do print(msg) end
+		-- and return early from ApplyFade()
+	 	return
+	end
+
 
 	local start_frame = app.activeCel.frameNumber or 1
 
@@ -93,4 +101,5 @@ dlg:button({
 	end
 })
 
+-- allow the user to continue to interact with Aseprite while this dialog is up
 dlg:show({wait=false})
