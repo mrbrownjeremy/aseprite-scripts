@@ -15,21 +15,31 @@ local dlg = Dialog("Move Cels")
 
 ---------------------------------------------------------------
 
-local MoveCels = function()
-
+local GetAndSortCels = function()
 	-- iterating over app.range.cels using ipairs() does not guarantee
 	-- sequential frameNumbers!
 	-- this can result in frames being moved out-of-sequence
 	--
 	-- the fix (workaround?) is to copy the contents of app.range.cels
 	-- into our own custom table then sort it by frameNumber
-	local cels = {}
-	for i,cel in ipairs(app.range.cels) do
-		table.insert(cels, cel)
-	end
-	table.sort(cels, function(a,b) return a.frameNumber < b.frameNumber end)
+	local _cels = {}
 
-	-- "cels" will now have the selected range of cels, correctly sorted by frameNumber
+	for i,cel in ipairs(app.range.cels) do
+		table.insert(_cels, cel)
+	end
+	table.sort(_cels, function(a,b) return a.frameNumber < b.frameNumber end)
+
+	return _cels
+end
+
+local cels = GetAndSortCels()
+
+---------------------------------------------------------------
+
+local MoveCels = function()
+
+	-- "cels" will have the selected range of cels, correctly sorted by frameNumber
+	cels = GetAndSortCels()
 
 
 	-- start, stop, and step are used to control the order we'll loop through the "cels" table
@@ -82,16 +92,36 @@ end
 ---------------------------------------------------------------
 
 dlg:label({
-	id = "activeLayer_name",
-	label = "layer: ",
+	id = "activeLayerName_label",
+	label = "          Layer: ",
 	text = app.activeLayer and app.activeLayer.name or "",
 })
 
+dlg:label({
+	id = "selectedRange_label",
+	label = "Selected Range: ",
+	text = ("%d – %d"):format(cels[1].frameNumber, cels[#cels].frameNumber),
+}):newrow()
+dlg:label({
+	id = "moveTo_label",
+	label = "     Moving To: ",
+	text = ""
+}):separator()
+
+
 dlg:number({
 	id = "to_frame",
-	label = "Move To:",
+	label = "       Move To:",
 	text = "",
 	focus = true,
+	onchange=function()
+		dlg:modify({
+			id="moveTo_label",
+			visible=true,
+			enabled=true,
+			text=("%d – %d"):format(dlg.data.to_frame, tostring(dlg.data.to_frame+#cels-1))
+		})
+	end
 })
 
 dlg:button({
