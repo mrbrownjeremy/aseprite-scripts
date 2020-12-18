@@ -77,7 +77,7 @@ local MoveCels = function()
 			app.activeSprite.frames[dlg.data.to_frame+(i-1)],
 			cels[i].image,
 			cels[i].position
-		)
+		).color = cels[i].color
 
 		-- delete the old cel
 		app.activeSprite:deleteCel(cels[i])
