@@ -98,15 +98,19 @@ dlg:label({
 })
 
 dlg:label({
-	id = "selectedRange_label",
+	id = "selected_range",
 	label = "Selected Range: ",
 	text = ("%d – %d"):format(cels[1].frameNumber, cels[#cels].frameNumber),
-}):newrow()
+})
+
 dlg:label({
 	id = "moveTo_label",
 	label = "     Moving To: ",
 	text = ""
-}):separator()
+})
+
+------------------------------
+dlg:separator()
 
 
 dlg:number({
@@ -115,11 +119,23 @@ dlg:number({
 	text = "",
 	focus = true,
 	onchange=function()
+		cels = GetAndSortCels()
+
+		local sel_range = ("%d – %d"):format(cels[1].frameNumber, cels[#cels].frameNumber)
+		local moving_to = ("%d – %d"):format(dlg.data.to_frame, tostring(dlg.data.to_frame+#cels-1))
+
+		dlg:modify({
+			id="selected_range",
+			visible=true,
+			enabled=true,
+			text=#cels > 0 and sel_range or ""
+		})
+
 		dlg:modify({
 			id="moveTo_label",
 			visible=true,
 			enabled=true,
-			text=("%d – %d"):format(dlg.data.to_frame, tostring(dlg.data.to_frame+#cels-1))
+			text=dlg.data.to_frame > 0 and moving_to or ""
 		})
 	end
 })
