@@ -36,7 +36,7 @@ dlg:number({
 
 
 dlg:button({
-	id = "FadeOut_button",
+	id = "DuplicateAndLink_button",
 	text = "Duplicate",
 	onclick = function() app.transaction( DupAndLink ) end
 })
