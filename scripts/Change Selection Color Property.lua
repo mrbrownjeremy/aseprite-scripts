@@ -4,7 +4,7 @@
 -- Use this script to quickly change the color of a range of
 -- Layers or Cels within Aseprite's timeline.
 --
--- This has buttons for six predefined colors.  Use the "xx"
+-- This has buttons for six predefined colors.  Use the "-"
 -- button to reset the selected range to the default color
 -- for the current Aseprite theme.
 --
