@@ -25,14 +25,48 @@ local GetAndSortCels = function()
 	local _cels = {}
 
 	for i,cel in ipairs(app.range.cels) do
-		table.insert(_cels, cel)
+		local clone_data = {
+			image=cel.image:clone(),
+			frameNumber=cel.frameNumber,
+			position=Point(cel.position),
+			color=Color(cel.color)
+		}
+
+		table.insert(_cels, clone_data)
 	end
 	table.sort(_cels, function(a,b) return a.frameNumber < b.frameNumber end)
 
 	return _cels
 end
 
+local num_frames
+local old_frames = { first=nil, last=nil }
+local new_frames = { first=nil, last=nil }
+
+local GetAndSortFrames = function()
+	local _frames = {}
+	for _,frame in ipairs(app.range.frames) do table.insert(_frames, frame.frameNumber) end
+	table.sort(_frames)
+
+	num_frames = #_frames
+	old_frames.first = _frames[1]
+	old_frames.last  = _frames[num_frames]
+
+	if dlg.data and type(dlg.data.to_frame)=="number" and dlg.data.to_frame > 0 then
+		local diff = dlg.data.to_frame - old_frames.first
+		new_frames.first = old_frames.first + diff
+		new_frames.last  = old_frames.last  + diff
+	else
+		new_frames.first = nil
+		new_frames.last  = nil
+	end
+
+	return _frames
+end
+
 local cels = GetAndSortCels()
+local frames = GetAndSortFrames()
+
 
 ---------------------------------------------------------------
 
@@ -40,51 +74,64 @@ local MoveCels = function()
 
 	-- "cels" will have the selected range of cels, correctly sorted by frameNumber
 	cels = GetAndSortCels()
+	frames = GetAndSortFrames()
 
-
-	-- start, stop, and step are used to control the order we'll loop through the "cels" table
-	-- we can't assume that we always want to increment from first cel to last cel
-	--
-	-- e.g.  if the range is 10 cels total, and we want to move them all 5 to the right
-	--       moving cel#1 to frame#5 would overwrite cel#5 before we had a chance to
-	--       properly move it!
+	local cels_index
 	local start, stop, step
 
-
-	-- if we're moving cels right
-	-- set up loop conditions to decrement from last cel to first
-	if dlg.data.to_frame > cels[1].frameNumber then
-		start = #cels
-		stop  = 1
+	if dlg.data.to_frame > frames[1] then
+		-- moving cels right
+		start = old_frames.last
+		stop  = old_frames.first
 		step  = -1
-
-	-- if moving cels left
-	-- set up loop conditions to increment from first cel to last
+		cels_index = #cels
 	else
-		 start = 1
-		 stop  = #cels
-		 step  = 1
+		-- moving cels left
+		start = old_frames.first
+		stop  = old_frames.last
+		step  = 1
+		cels_index = 1
 	end
-
-
 
 	for i=start, stop, step do
 
-		-- create a new cel using data from the cel we want to move
-		-- see: https://github.com/aseprite/api/blob/master/api/sprite.md#spritenewcel
-		app.activeSprite:newCel(
-			app.activeLayer,
-			app.activeSprite.frames[dlg.data.to_frame+(i-1)],
-			cels[i].image,
-			cels[i].position
-		).color = cels[i].color
+		local dest_frame = i+(dlg.data.to_frame - old_frames.first)
 
-		-- delete the old cel
-		app.activeSprite:deleteCel(cels[i])
+		-- if we're at a frameNumber in our loop where there is no corresponding cel data...
+		if ((cels[cels_index] == nil) or (i ~= cels[cels_index].frameNumber)) then
+
+			-- and if there is cel data at the destination cel...
+			local cel = app.activeLayer:cel(dest_frame)
+			-- ...then delete that cel data
+			if cel then app.activeSprite:deleteCel( cel ) end
+
+		else
+
+			local cel_data = cels[cels_index]
+
+			-- create a new cel using data from the cel we want to move
+			-- see: https://github.com/aseprite/api/blob/master/api/sprite.md#spritenewcel
+			app.activeSprite:newCel(
+				app.activeLayer,
+				app.activeSprite.frames[ dest_frame ],
+				cel_data.image,
+				cel_data.position
+			).color = cel_data.color
+			-- cel:newCel() will return the newly created cel object,
+			-- so chain on one exta operation — set the color of the new cel in the timeline
+
+			-- delete the old cel
+			app.activeSprite:deleteCel( app.activeLayer:cel( i ) )
+
+			-- we've successfully added a new cel to the timeline
+			-- increment cels_index if moving cels left, or decrement if moving cels right
+			-- so we can attempt to add the next cel in the next pass of the loop
+			cels_index = cels_index + step
+		end
 	end
 
 	-- set activeFrame to the new "first frame" that we moved the entire range to
-	app.activeFrame = app.activeSprite.frames[dlg.data.to_frame]
+	app.activeFrame = app.activeSprite.frames[new_frames.first]
 
 	app.refresh()
 end
@@ -100,7 +147,7 @@ dlg:label({
 dlg:label({
 	id = "selected_range",
 	label = "Selected Range: ",
-	text = ("%d – %d"):format(cels[1].frameNumber, cels[#cels].frameNumber),
+	text = ("%d – %d"):format(old_frames.first, old_frames.last),
 })
 
 dlg:label({
@@ -120,9 +167,10 @@ dlg:number({
 	focus = true,
 	onchange=function()
 		cels = GetAndSortCels()
+		frames = GetAndSortFrames()
 
-		local sel_range = ("%d – %d"):format(cels[1].frameNumber, cels[#cels].frameNumber)
-		local moving_to = ("%d – %d"):format(dlg.data.to_frame, tostring(dlg.data.to_frame+#cels-1))
+		local sel_range = ("%d – %d"):format(old_frames.first, old_frames.last)
+		local moving_to = ("%d – %d"):format(new_frames.first or 0, new_frames.last or 0)
 
 		dlg:modify({
 			id="selected_range",

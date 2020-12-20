@@ -1,5 +1,5 @@
 ---------------------------------------------------------------
--- Duplicate Layers (without appending "Copy" to new layer)
+-- Duplicate activeLayer (without appending "Copy" to new layer)
 --
 -- author: quietly-turning
 -- github: https://github.com/quietly-turning/
@@ -11,7 +11,7 @@ if not app.range.type == RangeType.LAYERS then return end
 ---------------------------------------------------------------
 
 local Duplicate = function()
-	-- duplicate whatever layers are currently selected
+	-- duplicate the activeLayer
 	app.command.DuplicateLayer()
 
 	-- remove " Copy" from activeLayer name
