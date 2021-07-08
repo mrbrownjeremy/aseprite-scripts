@@ -19,11 +19,12 @@ After you unzip the download, double click each .aseprite-extension file to inst
 
 Alternatively, you can import plugins using Aseprite:
 
-1. open Aseprite's **Preferences** interface (Edit → Preferences)
-2. click **Extensions** in the left pane of the Preferences interface
+1. open Aseprite's **Preferences** panel (Edit → Preferences)
+2. click **Extensions** in the left pane of the Preferences panel
 3. click **Add Extension**
-4. navigate to where your .aseprite-extension file is saved, click **OK**
+4. navigate to where your .aseprite-extension file is saved, then click **OK**
 5. click **Apply**
+6. you're good to go!
 
 ## Creating Keyboard Shortcuts
 
